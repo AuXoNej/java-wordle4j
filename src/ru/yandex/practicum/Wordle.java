@@ -1,5 +1,11 @@
 package ru.yandex.practicum;
 
+import java.util.Arrays;
+import java.util.Random;
+import java.util.Scanner;
+
+import static ru.yandex.practicum.Constants.*;
+
 /*
 в главном классе нам нужно:
     создать лог-файл (он должен передаваться во все классы)
@@ -13,6 +19,72 @@ public class Wordle {
 
     public static void main(String[] args) {
 
+        Logger log = new Logger(LOG_LEVEL);
+
+        try {
+            Random random = new Random();
+            Scanner scanner = new Scanner(System.in);
+
+            WordleDictionaryLoader loader = new WordleDictionaryLoader();
+            WordleDictionary dictionary = loader.readWordsFromFile(WORDS_FILENAME);
+            WordleGame game = new WordleGame(
+                dictionary.words().get(random.nextInt(dictionary.words().size())), dictionary);
+
+            System.out.println("Hello, Wordle!\n");
+
+            System.out.println("Начинаем игру!");
+            log.info("Начинаем игру!");
+
+            System.out.println("Введите слово или 'Выход' для завершения игры. Нажмите Enter для подсказки.");
+
+            while (true) {
+
+                var input = scanner.nextLine();
+
+                if (input.isBlank()) {
+                    log.debug("Пользователь ввел пустую строку, выводим подсказку");
+
+                    input = game.getHint();
+                    System.out.println(input);
+                }
+
+                var inputWord = input.trim().toLowerCase().replace("ё", "е");
+                if (EXIT_WORDS.contains(inputWord)) {
+                    break;
+                }
+
+                try {
+                    game.checkInput(inputWord);
+                } catch (WordleInputException e) {
+                    log.debug(e.getMessage());
+                    System.out.println(e.getMessage() + " Повторите ввод.");
+                    continue;
+                }
+
+
+                if (game.isWin(inputWord)) {
+                    log.info(String.format("Пользователь угадал слово '%s'", inputWord));
+                    System.out.println("Поздравляем! Вы угадали слово!");
+                    break;
+                }
+
+                System.out.println(game.step(inputWord));
+
+                game.newStep();
+
+                if (game.isLose()) {
+                    log.info(String.format("Пользователь не смог угадать слово '%s'", game.getAnswer()));
+                    System.out.printf("К сожалению, вы не угадали слово с %d попыток. Попробуйте еще раз.\n",
+                        MAX_STEPS);
+                    break;
+                }
+            }
+        } catch (Exception e) {
+            log.error(e.getMessage() + "\n\t" + e.getCause() + Arrays.toString(e.getStackTrace()));
+            System.err.printf("Критическая ошибка: %s\n", e.getMessage());
+        } finally {
+            System.out.println("Игра завершена.");
+        }
     }
 
 }
