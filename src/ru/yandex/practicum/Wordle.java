@@ -37,7 +37,7 @@ public class Wordle {
 
             System.out.println("Введите слово или 'Выход' для завершения игры. Нажмите Enter для подсказки.");
 
-            while(true) {
+            while (true) {
 
                 var input = scanner.nextLine();
 
@@ -48,13 +48,13 @@ public class Wordle {
                     System.out.println(input);
                 }
 
-                var input_word = input.trim().toLowerCase().replace("ё", "е");
-                if (EXIT_WORDS.contains(input_word)) {
+                var inputWord = input.trim().toLowerCase().replace("ё", "е");
+                if (EXIT_WORDS.contains(inputWord)) {
                     break;
                 }
 
                 try {
-                    game.checkInput(input_word);
+                    game.checkInput(inputWord);
                 } catch (WordleInputException e) {
                     log.debug(e.getMessage());
                     System.out.println(e.getMessage() + " Повторите ввод.");
@@ -62,13 +62,13 @@ public class Wordle {
                 }
 
 
-                if (game.isWin(input_word)) {
-                    log.info(String.format("Пользователь угадал слово '%s'", input_word));
+                if (game.isWin(inputWord)) {
+                    log.info(String.format("Пользователь угадал слово '%s'", inputWord));
                     System.out.println("Поздравляем! Вы угадали слово!");
                     break;
                 }
 
-                System.out.println(game.step(input_word));
+                System.out.println(game.step(inputWord));
 
                 game.newStep();
 
@@ -82,8 +82,7 @@ public class Wordle {
         } catch (Exception e) {
             log.error(e.getMessage() + "\n\t" + e.getCause() + Arrays.toString(e.getStackTrace()));
             System.err.printf("Критическая ошибка: %s\n", e.getMessage());
-        }
-        finally {
+        } finally {
             System.out.println("Игра завершена.");
         }
     }
