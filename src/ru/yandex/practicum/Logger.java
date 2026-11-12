@@ -13,19 +13,19 @@ public class Logger {
     private static final int INFO = 1;
     private static final int ERROR = 2;
 
-    private final int log_level;
+    private final int logLevel;
 
     private final PrintWriter out;
 
 
-    public Logger(String log_level) {
-        this(log_level, fileWriter());
+    public Logger(String logLevel) {
+        this(logLevel, fileWriter());
     }
 
-    public Logger(String log_level, PrintWriter out) {
+    public Logger(String logLevel, PrintWriter out) {
 
         this.out = out;
-        this.log_level = switch (log_level) {
+        this.logLevel = switch (logLevel) {
             case "DEBUG" -> DEBUG;
             case "INFO" -> INFO;
             case "ERROR" -> ERROR;
@@ -38,21 +38,21 @@ public class Logger {
     }
 
     public void debug(String message) {
-        if (log_level > DEBUG) {
+        if (logLevel > DEBUG) {
             return;
         }
         log("DEBUG", message);
     }
 
     public void info(String message) {
-        if (log_level > INFO) {
+        if (logLevel > INFO) {
             return;
         }
         log("INFO", message);
     }
 
     public void error(String message) {
-        if (log_level > ERROR) {
+        if (logLevel > ERROR) {
             return;
         }
         log("ERROR", message);
