@@ -52,6 +52,11 @@ public class WordleGame {
     }
 
     public void checkInput(String input) throws WordleInputException {
+
+        if (dictionary.words().isEmpty()) {
+            throw new RuntimeException("Невозможно проверить введенное слово, так как словарь пуст.");
+        }
+
         if (input.length() != WORD_LENGTH) {
             throw new WordleInputException(
                 String.format("Длина введенного слова не равна %s символам.", WORD_LENGTH));
@@ -80,6 +85,10 @@ public class WordleGame {
     }
 
     public String getHint() {
+
+        if (dictionary.words().isEmpty()) {
+            throw new RuntimeException("Не удалось получить подсказку. Словарь пуст.");
+        }
 
         if (inputWords.isEmpty()) {
             return dictionary.words().get(random.nextInt(dictionary.words().size()));

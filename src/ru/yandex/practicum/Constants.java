@@ -8,7 +8,7 @@ public class Constants {
     public static final String WORDS_FILENAME = "words_ru.txt";
     public static final Integer WORD_LENGTH = 5;
 
-    public static final Set<String> EXIT_WORDS = Set.of("exit", "quit", "выход", "q", "0");
+    public static final Set<String> EXIT_WORDS = Set.of("exit", "quit", "q", "0");
     public static final Integer MAX_STEPS = 6;
 
     public static final String LOG_LEVEL = "INFO";

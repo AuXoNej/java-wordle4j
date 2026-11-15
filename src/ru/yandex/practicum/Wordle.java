@@ -27,6 +27,8 @@ public class Wordle {
 
             WordleDictionaryLoader loader = new WordleDictionaryLoader();
             WordleDictionary dictionary = loader.readWordsFromFile(WORDS_FILENAME);
+            log.info("Словарь загружен [" + dictionary.words().size() + " слов]");
+
             WordleGame game = new WordleGame(
                 dictionary.words().get(random.nextInt(dictionary.words().size())), dictionary);
 
@@ -35,7 +37,7 @@ public class Wordle {
             System.out.println("Начинаем игру!");
             log.info("Начинаем игру!");
 
-            System.out.println("Введите слово или 'Выход' для завершения игры. Нажмите Enter для подсказки.");
+            System.out.println("Введите слово или 'exit' для завершения игры. Нажмите Enter для подсказки.");
 
             while (true) {
 
@@ -74,8 +76,8 @@ public class Wordle {
 
                 if (game.isLose()) {
                     log.info(String.format("Пользователь не смог угадать слово '%s'", game.getAnswer()));
-                    System.out.printf("К сожалению, вы не угадали слово с %d попыток. Попробуйте еще раз.\n",
-                        MAX_STEPS);
+                    System.out.printf("К сожалению, вы не угадали слово '%s' с %d попыток. Попробуйте еще раз.\n",
+                        game.getAnswer(), MAX_STEPS);
                     break;
                 }
             }

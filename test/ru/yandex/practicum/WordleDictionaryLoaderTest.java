@@ -15,6 +15,7 @@ import static org.junit.jupiter.api.Assertions.*;
 class WordleDictionaryLoaderTest {
 
     private static final String MESSAGE_BROKEN_FILE = "Произошла ошибка во время чтения файла словаря.";
+    private static final String MESSAGE_EMPTY_FILE = "Файл словаря пуст.";
 
     private static final List<String> FILE_LINES = List.of("КЛАСС", "слезы", "", "дом", "словами");
 
@@ -51,7 +52,7 @@ class WordleDictionaryLoaderTest {
         Path emptyFile = tempDir.resolve("empty.txt");
         Files.write(emptyFile, new byte[0]);
 
-        assertTrue(loader.readWordsFromFile(emptyFile.toString()).words().isEmpty());
+        assertThrows(RuntimeException.class, () -> loader.readWordsFromFile(emptyFile.toString()), MESSAGE_EMPTY_FILE);
     }
 
     @Test

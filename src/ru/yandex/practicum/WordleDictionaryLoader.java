@@ -23,16 +23,20 @@ public class WordleDictionaryLoader {
         )) {
             String line;
             while ((line = fileReader.readLine()) != null) {
+                line = line.replace(" ", "");
                 if (!checkWordFormat(line)) continue;
                 result.add(line.toLowerCase().replace("ё", "е"));
             }
         } catch (Exception e) {
             throw new RuntimeException("Произошла ошибка во время чтения файла словаря.", e);
         }
+        if (result.isEmpty()) {
+            throw new RuntimeException("Файл словаря пуст.");
+        }
         return new WordleDictionary(result);
     }
 
     private boolean checkWordFormat(String word) {
-        return word.length() == WORD_LENGTH;
+        return word.length() == WORD_LENGTH && word.matches("^\\p{IsCyrillic}+$");
     }
 }
